@@ -1,0 +1,20 @@
+[
+  {
+    "problemName": "Two Sum",
+    "difficulty": "Easy",
+    "topic": [
+      "Array",
+      "Hash Table"
+    ],
+    "timeSpent": 6,
+    "attempts": 1,
+    "accepted": true,
+    "runtime": "3 ms",
+    "memory": "16.1 MB",
+    "code": "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        int n = nums.size();\n        unordered_map<int , int> mpp;\n        vector<int>ans = {-1, -1};\n        for(int i = 0; i<n;i++) {\n            int rem = target - nums[i];\n            if(mpp.find(rem) != mpp.end()){\n                ans = {mpp[rem], i};\n            }\n            mpp[nums[i]]=i;\n        }\n        return ans;\n    }\n};",
+    "language": "cpp",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "timestamp": "2026-06-18T18:51:57.686Z"
+  }
+]
