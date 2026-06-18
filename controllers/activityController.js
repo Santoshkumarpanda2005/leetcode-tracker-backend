@@ -48,10 +48,11 @@ ${data.code}`;
             timestamp: new Date().toISOString()
         };
 
-        // Save to database via model
-        ActivityModel.save(finalRecord);
+        // Save to MongoDB via Mongoose model
+        const newActivity = new ActivityModel(finalRecord);
+        await newActivity.save();
 
-        console.log("Record saved to database.");
+        console.log("Record successfully saved to MongoDB Cloud.");
         res.status(200).json({ success: true, message: "Activity tracked successfully", data: finalRecord });
 
     } catch (error) {
@@ -60,12 +61,13 @@ ${data.code}`;
     }
 };
 
-const getActivity = (req, res) => {
+const getActivity = async (req, res) => {
     try {
-        const records = ActivityModel.getAll();
+        const records = await ActivityModel.find().sort({ createdAt: -1 });
         res.json(records);
     } catch (err) {
-        res.status(500).json({ error: "Failed to read database" });
+        console.error("Database read error:", err);
+        res.status(500).json({ error: "Failed to read from database" });
     }
 };
 

@@ -1,28 +1,24 @@
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 
-const DB_FILE = path.join(__dirname, '../database.json');
+const activitySchema = new mongoose.Schema({
+    problemName: { type: String, required: true },
+    difficulty: { type: String },
+    topic: [{ type: String }],
+    timeSpent: { type: Number },
+    attempts: { type: Number },
+    accepted: { type: Boolean },
+    runtime: { type: String },
+    memory: { type: String },
+    code: { type: String },
+    language: { type: String },
+    timeComplexity: { type: String },
+    spaceComplexity: { type: String },
+    timestamp: { type: Date, default: Date.now }
+}, { 
+    timestamps: true 
+});
 
-// Initialize database if it doesn't exist
-if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify([]));
-}
+// Avoid OverwriteModelError in serverless environments
+const Activity = mongoose.models.Activity || mongoose.model('Activity', activitySchema);
 
-const ActivityModel = {
-    getAll: () => {
-        try {
-            return JSON.parse(fs.readFileSync(DB_FILE));
-        } catch (err) {
-            return [];
-        }
-    },
-    
-    save: (record) => {
-        const dbData = ActivityModel.getAll();
-        dbData.push(record);
-        fs.writeFileSync(DB_FILE, JSON.stringify(dbData, null, 2));
-        return record;
-    }
-};
-
-module.exports = ActivityModel;
+module.exports = Activity;
