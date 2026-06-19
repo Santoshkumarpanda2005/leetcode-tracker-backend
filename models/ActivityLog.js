@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const activitySchema = new mongoose.Schema({
+const activityLogSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     problemName: { type: String, required: true },
-    username: { type: String, default: "Anonymous" },
     difficulty: { type: String },
     topic: [{ type: String }],
     timeSpent: { type: Number },
@@ -13,13 +13,8 @@ const activitySchema = new mongoose.Schema({
     code: { type: String },
     language: { type: String },
     timeComplexity: { type: String },
-    spaceComplexity: { type: String },
-    timestamp: { type: Date, default: Date.now }
-}, { 
-    timestamps: true 
-});
+    spaceComplexity: { type: String }
+}, { timestamps: true });
 
-// Avoid OverwriteModelError in serverless environments
-const Activity = mongoose.models.Activity || mongoose.model('Activity', activitySchema);
-
-module.exports = Activity;
+const ActivityLog = mongoose.models.ActivityLog || mongoose.model('ActivityLog', activityLogSchema);
+module.exports = ActivityLog;
