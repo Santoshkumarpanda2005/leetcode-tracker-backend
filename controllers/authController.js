@@ -60,3 +60,24 @@ exports.login = async (req, res) => {
     res.status(500).json({ detail: "Server Error" });
   }
 };
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email, leetcodeUsername, newPassword } = req.body;
+
+    const user = await User.findOne({ email, leetcodeUsername });
+    if (!user) {
+      return res.status(404).json({ detail: "User not found with matching Email and LeetCode Username" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).json({ detail: "Server Error" });
+  }
+};

@@ -1,6 +1,5 @@
 const Activity = require('../models/ActivityLog');
 const SkillProfile = require('../models/skillModel');
-const Recommendation = require('../models/recommendationModel');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -55,7 +54,8 @@ ${code}`;
             code,
             language,
             timeComplexity,
-            spaceComplexity
+            spaceComplexity,
+            recommendations: recommendedProblems
         });
 
         await newActivity.save();
@@ -70,15 +70,6 @@ ${code}`;
             skillProfile.scores.set(t, currentScore + 1);
         }
         await skillProfile.save();
-
-        // Update Recommendations
-        if (recommendedProblems.length > 0) {
-            await Recommendation.findOneAndUpdate(
-                { userId },
-                { problems: recommendedProblems },
-                { upsert: true, new: true }
-            );
-        }
 
         console.log("Activity processed and saved across relational models.");
         res.status(201).json({ message: 'Activity tracked successfully' });
@@ -101,12 +92,17 @@ exports.getActivity = async (req, res) => {
 
         const activities = await Activity.find({ userId: { $in: userIdsToCheck } }).sort({ createdAt: -1 }).limit(100);
         const skillProfile = await SkillProfile.findOne({ userId: { $in: userIdsToCheck } });
-        const recommendations = await Recommendation.findOne({ userId: { $in: userIdsToCheck } });
+
+        const totalProblemsSolved = activities.length;
+        const totalTimeSpent = activities.reduce((total, act) => total + (act.timeSpent || 0), 0);
 
         res.json({
+            profileStats: {
+                totalProblemsSolved,
+                totalTimeSpent
+            },
             activities,
-            skillProfile: skillProfile ? Object.fromEntries(skillProfile.scores) : {},
-            recommendations: recommendations ? recommendations.problems : []
+            skillProfile: skillProfile ? Object.fromEntries(skillProfile.scores) : {}
         });
     } catch (error) {
         console.error("Error fetching activity:", error);
