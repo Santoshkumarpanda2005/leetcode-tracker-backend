@@ -5,4 +5,4 @@ const skillSchema = new mongoose.Schema({
   scores: { type: Map, of: Number, default: {} }
 });
 
-module.exports = mongoose.model('SkillProfile', skillSchema);
+module.exports = mongoose.model('SkillProfile', skillSchema, 'skills');

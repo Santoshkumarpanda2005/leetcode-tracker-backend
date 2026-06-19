@@ -16,5 +16,5 @@ const activityLogSchema = new mongoose.Schema({
     spaceComplexity: { type: String }
 }, { timestamps: true });
 
-const ActivityLog = mongoose.models.ActivityLog || mongoose.model('ActivityLog', activityLogSchema);
+const ActivityLog = mongoose.models.ActivityLog || mongoose.model('ActivityLog', activityLogSchema, 'activities');
 module.exports = ActivityLog;
