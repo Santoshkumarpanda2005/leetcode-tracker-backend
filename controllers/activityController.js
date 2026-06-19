@@ -1,5 +1,6 @@
 const Activity = require('../models/ActivityLog');
 const SkillProfile = require('../models/skillModel');
+const User = require('../models/userModel');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -92,11 +93,22 @@ exports.getActivity = async (req, res) => {
 
         const activities = await Activity.find({ userId: { $in: userIdsToCheck } }).sort({ createdAt: -1 }).limit(100);
         const skillProfile = await SkillProfile.findOne({ userId: { $in: userIdsToCheck } });
+        
+        let user = null;
+        for (const id of userIdsToCheck) {
+            user = await User.findById(id);
+            if (user) break;
+        }
 
         const totalProblemsSolved = activities.length;
         const totalTimeSpent = activities.reduce((total, act) => total + (act.timeSpent || 0), 0);
 
         res.json({
+            user: user ? { 
+                email: user.email, 
+                leetcodeUsername: user.leetcodeUsername, 
+                createdAt: user.createdAt 
+            } : null,
             profileStats: {
                 totalProblemsSolved,
                 totalTimeSpent
