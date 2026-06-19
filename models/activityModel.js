@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const activitySchema = new mongoose.Schema({
     problemName: { type: String, required: true },
+    username: { type: String, default: "Anonymous" },
     difficulty: { type: String },
     topic: [{ type: String }],
     timeSpent: { type: Number },

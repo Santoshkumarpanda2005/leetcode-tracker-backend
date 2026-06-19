@@ -63,7 +63,8 @@ ${data.code}`;
 
 const getActivity = async (req, res) => {
     try {
-        const records = await ActivityModel.find().sort({ createdAt: -1 });
+        const query = req.query.username ? { username: req.query.username } : {};
+        const records = await ActivityModel.find(query).sort({ createdAt: -1 });
         res.json(records);
     } catch (err) {
         console.error("Database read error:", err);
