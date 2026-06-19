@@ -1,7 +1,7 @@
 const Activity = require('../models/ActivityLog');
 const SkillProfile = require('../models/skillModel');
 const Recommendation = require('../models/recommendationModel');
-const { GoogleGenerativeAI } = require('@google/generativeai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
