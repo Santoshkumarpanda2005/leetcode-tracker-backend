@@ -1,4 +1,4 @@
-const Activity = require('../models/activityModel');
+const Activity = require('../models/ActivityLog');
 const SkillProfile = require('../models/skillModel');
 const Recommendation = require('../models/recommendationModel');
 const { GoogleGenerativeAI } = require('@google/generativeai');
