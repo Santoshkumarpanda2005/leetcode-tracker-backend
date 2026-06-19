@@ -107,7 +107,14 @@ exports.getActivity = async (req, res) => {
             user: user ? { 
                 email: user.email, 
                 leetcodeUsername: user.leetcodeUsername, 
-                createdAt: user.createdAt 
+                createdAt: user.createdAt,
+                name: user.name,
+                bio: user.bio,
+                phoneNumber: user.phoneNumber,
+                gender: user.gender,
+                githubUrl: user.githubUrl,
+                linkedinUrl: user.linkedinUrl,
+                avatar: user.avatar
             } : null,
             profileStats: {
                 totalProblemsSolved,

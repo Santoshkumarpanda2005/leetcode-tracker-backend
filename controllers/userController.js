@@ -21,7 +21,7 @@ exports.getProfile = async (req, res) => {
 // @access  Private
 exports.updateProfile = async (req, res) => {
   try {
-    const { name, phoneNumber, gender, dateOfBirth, bio, githubUrl, linkedinUrl } = req.body;
+    const { name, phoneNumber, gender, dateOfBirth, bio, githubUrl, linkedinUrl, avatar } = req.body;
 
     // Find user by ID from JWT token
     const user = await User.findById(req.user.sub);
@@ -38,6 +38,7 @@ exports.updateProfile = async (req, res) => {
     if (bio !== undefined) user.bio = bio;
     if (githubUrl !== undefined) user.githubUrl = githubUrl;
     if (linkedinUrl !== undefined) user.linkedinUrl = linkedinUrl;
+    if (avatar !== undefined) user.avatar = avatar;
 
     const updatedUser = await user.save();
     

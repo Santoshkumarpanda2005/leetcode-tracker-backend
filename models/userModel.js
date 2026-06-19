@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: Date, default: null },
   bio: { type: String, default: "" },
   githubUrl: { type: String, default: "" },
-  linkedinUrl: { type: String, default: "" }
+  linkedinUrl: { type: String, default: "" },
+  avatar: { type: String, default: "" }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
